@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="bootstrap-3.3.5-dist/css/bootstrap.css" />
+    <script type="text/javascript" src="jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        function beginEdit(obj){//obj为编辑按钮的对象，用来查找其他所需要的数据
+            var tr = obj.parentNode.parentNode;
+            var td1=tr.children[0];
+            var td2 = tr.children[1];
+            var td1Span = document.createElement('span');
+            td1Span.innerHTML='<input value='+$(td1).html()+'>';
+            $(td1).empty();
+            td1.appendChild(td1Span);
+            var td2Span = document.createElement('span');
+            td2Span.innerHTML='<input value='+$(td2).html()+'>';
+            $(td2).empty();
+            td2.appendChild(td2Span);
+            //更新和取消 按钮替换原来的编辑按钮
+            var tdEdit=obj.parentNode;
+            $(tdEdit).empty();
+            var updateA= document.createElement('a');
+            $(updateA).attr('href','#').html('更新').click(function (){
+                update(updateA,obj);
+            });
+            var cancelA=document.createElement('a');
+            $(cancelA).attr('href','#').html('取消').click(function (){
+                cancelUpdate(cancelA,obj);
+            });
+            $(tdEdit).append(updateA);
+            $(tdEdit).append(cancelA);
+        }
+        
+        function update(obj,objEdit) {
+            var tr = obj.parentNode.parentNode;
+            var td1=tr.children[0];
+            var td2 = tr.children[1];
+            var title = $($(td1).children().get(0)).attr('value');
+            var desc = $($(td1).children().get(1)).attr('value');
+            //提交服务器
+            //恢复状态
+            cancelUpdate(obj,objEdit);
+        }
+        function cancelUpdate(obj,objEdit) {//obj为当前超链接元素，用于查找其他元素
+            var tr = obj.parentNode.parentNode;
+            var td1=tr.children[0];
+            var td2 = tr.children[1];
+            var span1=$(td1).children().get(0);
+            var title = $($(span1).children().get(0)).attr('value');
+            var span2=$(td2).children().get(0);
+            var desc = $($(span2).children().get(0)).attr('value');
+            //恢复
+            $(td1).empty().html(title);
+            $(td2).empty().html(desc);
+            //添加编辑按钮
+            var parentObj = $(obj).parent().get(0);//缓存父元素
+            $(obj).parent().empty();//清除更新和取消按钮
+            //$(parentObj).html('Imya');//
+            $(parentObj).append(objEdit);
+        }
+    </script>
+</head>
+<body>
+<table class="table">
+    <tr>
+        <td>aaa</td>
+        <td>bbb</td>
+        <td><a onclick="javascript:beginEdit(this);return false;" href="#">编辑</a></td>
+        <td><a>删除</a></td>
+    </tr>
+    <tr>
+        <td>aaa</td>
+        <td>bbb</td>
+    </tr>
+</table>
+</body>
+</html>
