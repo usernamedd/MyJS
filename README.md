@@ -1,0 +1,2 @@
+# MyJS
+study about js
